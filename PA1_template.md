@@ -160,7 +160,7 @@ ggplot(StepsPerDay, aes(Steps)) +
 	scale_y_continuous(breaks=seq(0,18,2))
 ```
 
-![](PA1_template_files/figure-html/histogram1-1.png)<!-- -->
+![](figure-html/histogram1-1.png)<!-- -->
 
 
 **3. Mean and median of total number of steps taken per day:**
@@ -210,7 +210,7 @@ ggplot(StepsPerTime, aes(time, steps)) +
         theme(plot.title = element_text(face="bold", size=12))
 ```
 
-![](PA1_template_files/figure-html/timeplot1-1.png)<!-- -->
+![](figure-html/timeplot1-1.png)<!-- -->
 
 **2. Display the 5-minute interval (on average across all the days) with the maximum number of steps**
 
@@ -340,7 +340,7 @@ ggplot(StepsPerDayFull, aes(Steps)) +
 	scale_y_continuous(breaks=seq(0,26,2))
 ```
 
-![](PA1_template_files/figure-html/histogram2-1.png)<!-- -->
+![](figure-html/histogram2-1.png)<!-- -->
 
 **4B. Calculate and report the mean and median total number of steps taken per day:**  
 
@@ -432,6 +432,6 @@ ggplot(StepsPerTime_dt, aes(time, steps)) +
         facet_grid(DayType ~ .)
 ```
 
-![](PA1_template_files/figure-html/timeplot2-1.png)<!-- -->
+![](figure-html/timeplot2-1.png)<!-- -->
 
 + The two time series panel plots above show that the peak step value is much higher during the weekdays, while the weekends exhibit more sustained activity.
