@@ -8,7 +8,6 @@ output:
 This is my submission for Reproducible Research Course Project.
 
 + To read more information view the [ReadMe](https://github.com/dbwebhead/reproducible-research/blob/master/README.md) on GitHub.
-[ReadMe2](https://github.com/dbwebhead/reproducible-research/blob/master/README.md) on GitHub.
 
 + The data for the assignment can be downloaded [here](https://github.com/dbwebhead/reproducible-research/blob/master/activity.zip). 
 
