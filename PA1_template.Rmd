@@ -40,20 +40,19 @@ str(activity_df)
 ```
 
 As shown, the variables included in this data set are:  
-<ul>
+
 1. **steps**: Number of steps taking in a 5-minute interval (missing values are coded as NA)  
+
 2. **date**: The date on which the measurement was taken in YYYY-MM-DD format  
+
 3. **interval**: Identifier for the 5-minute interval in which measurement was taken  
-</ul>
 
 ## What is mean total number of steps taken per day?
 
 *For this part of the assignment, you can ignore the missing values in the dataset.*  
-<ul>
 *1. Calculate the total number of steps taken per day*  
 *2. Make a histogram of the total number of steps taken each day*  
 *3. Calculate and report the mean and median total number of steps taken per day* 
-</ul>
 
 **1. Number of steps per day:**
 
@@ -99,10 +98,9 @@ print(paste("The Median number of steps per day is", round(stepMedian,1)))
 ```
 
 
-## What is the average daily activity pattern?
-<ul>*1. Make a time series plot (i.e., type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)*  
-*2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?* 
-</ul>
+## What is the average daily activity pattern?  
+*1. Make a time series plot (i.e., type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis).  2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?* 
+
 + With the time series plot below, it is evident that the maximum number of steps on average across all the days appears to be a little over 200.  This occurs approximately at the 8-minute mark.  
 <br>
 **1. Time series plot of the 5 minute interval (x) and average number of steps taken averaged across all days (y):**
@@ -126,10 +124,10 @@ ggplot(StepsPerTime, aes(time, steps)) +
 
 ```{r fiveminint, echo=TRUE, fig.width=10, warning=FALSE}
 # table for dplyr
-ST <- tbl_df(StepsPerTime)
+steps_df <- tbl_df(StepsPerTime)
 
 # find the column
-ST %>% select(time, steps) %>% filter(steps==max(ST$steps))
+steps_df %>% select(time, steps) %>% filter(steps==max(steps_df$steps))
 ```
 <br>
 
@@ -218,9 +216,7 @@ stepMedianImp <- median(StepsPerDayFull$Steps)
 print(paste("The imputed Median number of steps per day is", round(stepMedianImp,2)))
 ```
 
-<img src="C:/Users/hallm/Desktop/COURSERA-RR/figure/yellow_idea_bulb.jpg" width="50px" height="10px" />
-
-+ Evidently, imputing missing data has minimal impact on the mean and the median of the total daily number of steps.  
++ Evidently, imputing the missing data has minimal impact on the mean and the median of the total daily number of steps.  
 + Watching the histogram we note that the only bin that has changed is the interval between 10000 and 12500 steps, which has grown from a frequency of 18 to a frequency of 26.  
 + Also note that different methods for replace missing values may cause different results.
 
