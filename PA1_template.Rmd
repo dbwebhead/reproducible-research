@@ -31,6 +31,7 @@ if (!require("dplyr")) {
 # invoke libraries
 library(ggplot2)
 library(dplyr)
+# set weekdays in English (for graph axes)
 Sys.setlocale("LC_TIME", "English")
 ```
 
@@ -102,7 +103,7 @@ print(paste("The Median number of steps per day is", round(stepMedian,1)))
 *1. Make a time series plot (i.e., type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis).  2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?* 
 
 + With the time series plot below, it is evident that the maximum number of steps on average across all the days appears to be a little over 200.  This occurs approximately at the 8-minute mark.  
-<br>
+
 **1. Time series plot of the 5 minute interval (x) and average number of steps taken averaged across all days (y):**
 
 ```{r timeplot1, echo=TRUE, fig.width=10, warning=FALSE}
@@ -129,7 +130,6 @@ steps_df <- tbl_df(StepsPerTime)
 # find the column
 steps_df %>% select(time, steps) %>% filter(steps==max(steps_df$steps))
 ```
-<br>
 
 ## Imputing missing values
 
@@ -141,13 +141,13 @@ steps_df %>% select(time, steps) %>% filter(steps==max(steps_df$steps))
 + *Do these values differ from the estimates from the first part of the assignment?*  
 + *What is the impact of imputing missing data on the estimates of the total daily number of steps?* 
 
-<br>
 **1. Determine total number of missing values in the dataset:**
 
 ```{r missingval,  echo=TRUE}
 # table for dplyr
 activity_tbl <- tbl_df(activity_df)
 
+# display first few rows showing the missing values
 head(activity_tbl)
 
 # find the column
@@ -156,18 +156,19 @@ activity_tbl %>%
    summarize(missing_values = n())
 ```
 
-<br>
 **2. Replace missing values:**  
 
-+ The rounded values of the average 5-minute interval is used to replace the NA values.  
++ The rounded values of the average 5-minute interval is used to replace the 2,304 NA values.  
 + *CompleteSteps* is the new column without missing values.
 
 ```{r imputena,  echo=TRUE}
 # values with NA are imputed in a new column
-activity_df$CompleteSteps <- ifelse(is.na(activity_df$steps), round(StepsPerTime$steps[match(activity_df$interval, StepsPerTime$interval)],0), activity_df$steps)
+activity_df$CompleteSteps <- 
+  ifelse(is.na(activity_df$steps),
+  round(StepsPerTime$steps[match(activity_df$interval,StepsPerTime$interval)],0),
+  activity_df$steps)
 ```
 
-<br>
 **3. Create a new dataset that is equal to the original dataset but with the missing data filled in:**  
 
 + The first ten values of the new data set are shown below. 
@@ -180,7 +181,7 @@ activityFull_df <- data.frame(steps=activity_df$CompleteSteps,
 # display the first ten rows of the new dataset
 head(activityFull_df, n=10)
 ```
-<br>
+
 **4A. Histogram of the total number of steps taken each day (with missing data filled in):** 
 
 ```{r histogram2, echo=TRUE, fig.width=10, warning=FALSE}
@@ -218,9 +219,8 @@ print(paste("The imputed Median number of steps per day is", round(stepMedianImp
 
 + Evidently, imputing the missing data has minimal impact on the mean and the median of the total daily number of steps.  
 + Watching the histogram we note that the only bin that has changed is the interval between 10000 and 12500 steps, which has grown from a frequency of 18 to a frequency of 26.  
++ Note the difference between the mean and median has shrunken to the point where it is hard to differentiate between the two on the histogram. 
 + Also note that different methods for replace missing values may cause different results.
-
-<br>
 
 ## Are there differences in activity patterns between weekdays and weekends?  
 + *For this part the weekdays() function may be of some help here. Use the dataset with the filled-in missing values for this part.*  
@@ -236,7 +236,7 @@ print(paste("The imputed Median number of steps per day is", round(stepMedianImp
 # create new date variable in yyyy-mm-dd format 
 activityFull_df$RealDate <- as.Date(activityFull_df$date, format = "%Y-%m-%d")
 
-# create a weekday variable
+# create a weekday variable using the weekdays function
 activityFull_df$weekday <- weekdays(activityFull_df$RealDate)
 
 # create a new day type variable (indicating weekday or weekend day)
@@ -246,7 +246,7 @@ activityFull_df$DayType <- ifelse(activityFull_df$weekday=='Saturday' |
 # display first ten values
 head(activityFull_df, n=10)
 ```
-<br>
+
 **2. Create two time series plot of the 5-minute interval (x) and the average number of steps taken averaged across weekday days or weekend days (y):** 
 
 ```{r timeplot2, echo=TRUE, fig.width=10, warning=FALSE}
@@ -258,9 +258,11 @@ StepsPerTime_dt$time <- StepsPerTime$interval/100
 
 # draw the line plot
 ggplot(StepsPerTime_dt, aes(time, steps)) +
-        geom_line(col="darkred") +
+        geom_line(col="darkgreen") +
         ggtitle("Average Steps per Time Interval: Weekdays vs. Weekends") + 
-        xlab("Time")+ylab("Steps") + 
+        xlab("Time")+ylab("Avg Number of Steps") + 
         theme(plot.title = element_text(face="bold", size=12)) + 
         facet_grid(DayType ~ .)
 ```
+
++ The two time series panel plots above show that the peak step value is much higher during the weekdays, while the weekends exhibit more sustained activity.
