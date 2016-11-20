@@ -1,9 +1,4 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 This is my submission for Reproducible Research Course Project.
 
@@ -16,7 +11,8 @@ This is my submission for Reproducible Research Course Project.
 *1. Load the data (i.e. read.csv())*  
 *2. Process/transform the data (if necessary) into a format suitable for your analysis*  
 
-```{r readtable, echo=TRUE, message=FALSE, warning=FALSE}
+
+```r
 # import the activity data file
 activity_df <- read.csv("activity.csv")
 
@@ -34,9 +30,21 @@ library(dplyr)
 Sys.setlocale("LC_TIME", "English")
 ```
 
-```{r, echo=TRUE}
+```
+## [1] "English_United States.1252"
+```
+
+
+```r
 # some information about the variables
 str(activity_df)
+```
+
+```
+## 'data.frame':	17568 obs. of  3 variables:
+##  $ steps   : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ date    : Factor w/ 61 levels "2012-10-01","2012-10-02",..: 1 1 1 1 1 1 1 1 1 1 ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
 ```
 
 As shown, the variables included in this data set are:  
@@ -57,12 +65,78 @@ As shown, the variables included in this data set are:
 
 **1. Number of steps per day:**
 
-```{r stepsperday, echo=TRUE}
+
+```r
 # create and print number of steps per day
 StepsPerDay <- aggregate(activity_df$steps, list(activity_df$date), 
                          FUN=sum, na.rm=TRUE)
 colnames(StepsPerDay) <- c("Date", "Steps")
 StepsPerDay
+```
+
+```
+##          Date Steps
+## 1  2012-10-01     0
+## 2  2012-10-02   126
+## 3  2012-10-03 11352
+## 4  2012-10-04 12116
+## 5  2012-10-05 13294
+## 6  2012-10-06 15420
+## 7  2012-10-07 11015
+## 8  2012-10-08     0
+## 9  2012-10-09 12811
+## 10 2012-10-10  9900
+## 11 2012-10-11 10304
+## 12 2012-10-12 17382
+## 13 2012-10-13 12426
+## 14 2012-10-14 15098
+## 15 2012-10-15 10139
+## 16 2012-10-16 15084
+## 17 2012-10-17 13452
+## 18 2012-10-18 10056
+## 19 2012-10-19 11829
+## 20 2012-10-20 10395
+## 21 2012-10-21  8821
+## 22 2012-10-22 13460
+## 23 2012-10-23  8918
+## 24 2012-10-24  8355
+## 25 2012-10-25  2492
+## 26 2012-10-26  6778
+## 27 2012-10-27 10119
+## 28 2012-10-28 11458
+## 29 2012-10-29  5018
+## 30 2012-10-30  9819
+## 31 2012-10-31 15414
+## 32 2012-11-01     0
+## 33 2012-11-02 10600
+## 34 2012-11-03 10571
+## 35 2012-11-04     0
+## 36 2012-11-05 10439
+## 37 2012-11-06  8334
+## 38 2012-11-07 12883
+## 39 2012-11-08  3219
+## 40 2012-11-09     0
+## 41 2012-11-10     0
+## 42 2012-11-11 12608
+## 43 2012-11-12 10765
+## 44 2012-11-13  7336
+## 45 2012-11-14     0
+## 46 2012-11-15    41
+## 47 2012-11-16  5441
+## 48 2012-11-17 14339
+## 49 2012-11-18 15110
+## 50 2012-11-19  8841
+## 51 2012-11-20  4472
+## 52 2012-11-21 12787
+## 53 2012-11-22 20427
+## 54 2012-11-23 21194
+## 55 2012-11-24 14478
+## 56 2012-11-25 11834
+## 57 2012-11-26 11162
+## 58 2012-11-27 13646
+## 59 2012-11-28 10183
+## 60 2012-11-29  7047
+## 61 2012-11-30     0
 ```
 
 
@@ -71,7 +145,8 @@ StepsPerDay
 + Below is a histogram of the aggregate number of steps taken per day.  
 + On the histogram, a blue and a red vertical line is drawn to show the mean and median value of the data, respectively.
 
-```{r histogram1, echo=TRUE, fig.width=10, warning=FALSE}
+
+```r
 # draw the histogram
 ggplot(StepsPerDay, aes(Steps)) +
 	geom_histogram(boundary=0, binwidth=2500, col="darkblue", fill="lightblue") + 
@@ -85,17 +160,30 @@ ggplot(StepsPerDay, aes(Steps)) +
 	scale_y_continuous(breaks=seq(0,18,2))
 ```
 
+![](PA1_template_files/figure-html/histogram1-1.png)<!-- -->
+
 
 **3. Mean and median of total number of steps taken per day:**
 
-```{r calcavg1, echo=TRUE}
+
+```r
 # calculate mean (ignoring missing values)
 stepMean <- mean(StepsPerDay$Steps, na.rm=TRUE)
 print(paste("The Mean number of steps per day is", round(stepMean,1)))
+```
 
+```
+## [1] "The Mean number of steps per day is 9354.2"
+```
+
+```r
 # calculate median (ignoring missing values)
 stepMedian <- median(StepsPerDay$Steps, na.rm=TRUE)
 print(paste("The Median number of steps per day is", round(stepMedian,1)))
+```
+
+```
+## [1] "The Median number of steps per day is 10395"
 ```
 
 
@@ -107,7 +195,8 @@ print(paste("The Median number of steps per day is", round(stepMedian,1)))
 <br>
 **1. Time series plot of the 5 minute interval (x) and average number of steps taken averaged across all days (y):**
 
-```{r timeplot1, echo=TRUE, fig.width=10, warning=FALSE}
+
+```r
 # create table with steps per time
 StepsPerTime <- aggregate(steps~interval, data=activity_df, FUN=mean, na.action=na.omit)
 
@@ -122,14 +211,24 @@ ggplot(StepsPerTime, aes(time, steps)) +
         theme(plot.title = element_text(face="bold", size=12))
 ```
 
+![](PA1_template_files/figure-html/timeplot1-1.png)<!-- -->
+
 **2. Display the 5-minute interval (on average across all the days) with the maximum number of steps**
 
-```{r fiveminint, echo=TRUE, fig.width=10, warning=FALSE}
+
+```r
 # table for dplyr
 ST <- tbl_df(StepsPerTime)
 
 # find the column
 ST %>% select(time, steps) %>% filter(steps==max(ST$steps))
+```
+
+```
+## # A tibble: 1 × 2
+##    time    steps
+##   <dbl>    <dbl>
+## 1  8.35 206.1698
 ```
 <br>
 
@@ -146,16 +245,38 @@ ST %>% select(time, steps) %>% filter(steps==max(ST$steps))
 <br>
 **1. Determine total number of missing values in the dataset:**
 
-```{r missingval,  echo=TRUE}
+
+```r
 # table for dplyr
 activity_tbl <- tbl_df(activity_df)
 
 head(activity_tbl)
+```
 
+```
+## # A tibble: 6 × 3
+##   steps       date interval
+##   <int>     <fctr>    <int>
+## 1    NA 2012-10-01        0
+## 2    NA 2012-10-01        5
+## 3    NA 2012-10-01       10
+## 4    NA 2012-10-01       15
+## 5    NA 2012-10-01       20
+## 6    NA 2012-10-01       25
+```
+
+```r
 # find the column
 activity_tbl %>% 
    filter(is.na(steps)) %>% 
    summarize(missing_values = n())
+```
+
+```
+## # A tibble: 1 × 1
+##   missing_values
+##            <int>
+## 1           2304
 ```
 
 <br>
@@ -164,7 +285,8 @@ activity_tbl %>%
 + The rounded values of the average 5-minute interval is used to replace the NA values.  
 + *CompleteSteps* is the new column without missing values.
 
-```{r imputena,  echo=TRUE}
+
+```r
 # values with NA are imputed in a new column
 activity_df$CompleteSteps <- ifelse(is.na(activity_df$steps), round(StepsPerTime$steps[match(activity_df$interval, StepsPerTime$interval)],0), activity_df$steps)
 ```
@@ -174,7 +296,8 @@ activity_df$CompleteSteps <- ifelse(is.na(activity_df$steps), round(StepsPerTime
 
 + The first ten values of the new data set are shown below. 
 
-```{r dispimpdf, echo=TRUE}
+
+```r
 # create new imputed dataset
 activityFull_df <- data.frame(steps=activity_df$CompleteSteps, 
                               interval=activity_df$interval, date=activity_df$date)
@@ -182,10 +305,25 @@ activityFull_df <- data.frame(steps=activity_df$CompleteSteps,
 # display the first ten rows of the new dataset
 head(activityFull_df, n=10)
 ```
+
+```
+##    steps interval       date
+## 1      2        0 2012-10-01
+## 2      0        5 2012-10-01
+## 3      0       10 2012-10-01
+## 4      0       15 2012-10-01
+## 5      0       20 2012-10-01
+## 6      2       25 2012-10-01
+## 7      1       30 2012-10-01
+## 8      1       35 2012-10-01
+## 9      0       40 2012-10-01
+## 10     1       45 2012-10-01
+```
 <br>
 **4A. Histogram of the total number of steps taken each day (with missing data filled in):** 
 
-```{r histogram2, echo=TRUE, fig.width=10, warning=FALSE}
+
+```r
 # prepare data
 StepsPerDayFull <- aggregate(activityFull_df$steps, list(activityFull_df$date), FUN=sum)
 colnames(StepsPerDayFull) <- c("Date", "Steps")
@@ -203,19 +341,32 @@ ggplot(StepsPerDayFull, aes(Steps)) +
 	scale_y_continuous(breaks=seq(0,26,2))
 ```
 
+![](PA1_template_files/figure-html/histogram2-1.png)<!-- -->
+
 **4B. Calculate and report the mean and median total number of steps taken per day:**  
 
 + *Do these values differ from the estimates from the first part of the assignment?*    
 + *What is the impact of imputing missing data on the estimates of the total daily number of steps?* 
 
-```{r calcavg2, echo=TRUE}
+
+```r
 # calculate mean (missing values imputed)
 stepMeanImp <- mean(StepsPerDayFull$Steps)
 print(paste("The imputed Mean number of steps per day is", round(stepMeanImp,2)))
+```
 
+```
+## [1] "The imputed Mean number of steps per day is 10765.64"
+```
+
+```r
 # calculate median (missing values imputed)
 stepMedianImp <- median(StepsPerDayFull$Steps)
 print(paste("The imputed Median number of steps per day is", round(stepMedianImp,2)))
+```
+
+```
+## [1] "The imputed Median number of steps per day is 10762"
 ```
 
 <img src="C:/Users/hallm/Desktop/COURSERA-RR/figure/yellow_idea_bulb.jpg" width="50px" height="10px" />
@@ -236,7 +387,8 @@ print(paste("The imputed Median number of steps per day is", round(stepMedianImp
 + *DayType* is the new column indicating if the day is a weekday day or weekend day.  
 + The first ten values of the new table are shown below:
 
-```{r actdiff, echo=TRUE}
+
+```r
 # create new date variable in yyyy-mm-dd format 
 activityFull_df$RealDate <- as.Date(activityFull_df$date, format = "%Y-%m-%d")
 
@@ -250,10 +402,25 @@ activityFull_df$DayType <- ifelse(activityFull_df$weekday=='Saturday' |
 # display first ten values
 head(activityFull_df, n=10)
 ```
+
+```
+##    steps interval       date   RealDate weekday DayType
+## 1      2        0 2012-10-01 2012-10-01  Monday weekday
+## 2      0        5 2012-10-01 2012-10-01  Monday weekday
+## 3      0       10 2012-10-01 2012-10-01  Monday weekday
+## 4      0       15 2012-10-01 2012-10-01  Monday weekday
+## 5      0       20 2012-10-01 2012-10-01  Monday weekday
+## 6      2       25 2012-10-01 2012-10-01  Monday weekday
+## 7      1       30 2012-10-01 2012-10-01  Monday weekday
+## 8      1       35 2012-10-01 2012-10-01  Monday weekday
+## 9      0       40 2012-10-01 2012-10-01  Monday weekday
+## 10     1       45 2012-10-01 2012-10-01  Monday weekday
+```
 <br>
 **2. Create two time series plot of the 5-minute interval (x) and the average number of steps taken averaged across weekday days or weekend days (y):** 
 
-```{r timeplot2, echo=TRUE, fig.width=10, warning=FALSE}
+
+```r
 # create table with steps per time across weekday days or weekend days
 StepsPerTime_dt <- aggregate(steps~interval + DayType, data=activityFull_df, FUN=mean, na.action=na.omit)
 
@@ -268,3 +435,5 @@ ggplot(StepsPerTime_dt, aes(time, steps)) +
         theme(plot.title = element_text(face="bold", size=12)) + 
         facet_grid(DayType ~ .)
 ```
+
+![](PA1_template_files/figure-html/timeplot2-1.png)<!-- -->
